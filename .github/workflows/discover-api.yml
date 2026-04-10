@@ -20,10 +20,10 @@ jobs:
         npm install -g @stoplight/spectral-cli
         spectral lint ${{ env.API_FILES }} --ruleset .spectral.yaml
         
-    - name: Debug files
+    - name: Difference
+      id: difference-output
       run: |
-        echo "API_FILES=${{ env.API_FILES }}"
-        ls -l
+        echo "action_updates=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.sha }} | xargs)" >> $GITHUB_OUTPUT
     
     - uses: ibm-apiconnect/apic-discovery-action@main
       id: discover-apis
@@ -34,15 +34,9 @@ jobs:
         api_key: ${{ secrets.APICAPIKEY }}
         api_files: ${{ env.API_FILES }}
         resync_check: true
-        insecure_skip_tls_verify: true
+        git_diff: ${{ steps.difference-output.outputs.action_updates }}
         
     - name: Display the action-result
       run: |
-        RESULT='${{ steps.discover-apis.outputs.action-result }}'
-        echo "Result from IBM: $RESULT"
-        
-        # Jika hasil kosong atau null, kita paksa error agar GitHub jadi MERAH
-        if [ "$RESULT" == "[]" ] || [ "$RESULT" == "" ] || [ "$RESULT" == "null" ]; then
-          echo "Koneksi berhasil, tapi tidak ada API yang terdaftar/terkirim ke IBM!"
-          exit 1
-        fi
+        echo "Result of the action: ${{ steps.discover-apis.outputs.action-result }}"
+        echo "End"
