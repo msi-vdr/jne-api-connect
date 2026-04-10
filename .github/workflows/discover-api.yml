@@ -2,7 +2,7 @@ name: Sync Discovered API with APIConnect
 on: [pull_request, workflow_dispatch, push]
 
 env:
-  API_HOST: ap-southeast-a.apiconnect.automation.ibm.com
+  API_HOST: https://ap-southeast-a.apiconnect.automation.ibm.com
   PLATFORM_API_PREFIX: platform-api-jne
   PROVIDER_ORG: dev4501662
   API_FILES: openapi2.yaml
