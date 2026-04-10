@@ -20,10 +20,10 @@ jobs:
         npm install -g @stoplight/spectral-cli
         spectral lint ${{ env.API_FILES }} --ruleset .spectral.yaml
         
-    - name: Difference
-      id: difference-output
+    - name: Debug files
       run: |
-        echo "action_updates=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.before }} ${{ github.sha }} | xargs)" >> $GITHUB_OUTPUT
+        echo "API_FILES=${{ env.API_FILES }}"
+        ls -l
     
     - uses: ibm-apiconnect/apic-discovery-action@main
       id: discover-apis
@@ -31,10 +31,10 @@ jobs:
         api_host: ${{ env.API_HOST }}
         platform_api_prefix: ${{ env.PLATFORM_API_PREFIX }}
         provider_org: ${{ env.PROVIDER_ORG }}
-        api_key: ${{ secrets.apicApikey }}
+        api_key: ${{ secrets.APICAPIKEY }}
         api_files: ${{ env.API_FILES }}
         resync_check: true
-        git_diff: ${{ steps.difference-output.outputs.action_updates }}
+        insecure_skip_tls_verify: true
         
     - name: Display the action-result
       run: |
