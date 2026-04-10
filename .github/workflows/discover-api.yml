@@ -38,5 +38,11 @@ jobs:
         
     - name: Display the action-result
       run: |
-        echo "Result of the action: ${{ steps.discover-apis.outputs.action-result }}"
-        echo "End"
+        RESULT='${{ steps.discover-apis.outputs.action-result }}'
+        echo "Result from IBM: $RESULT"
+        
+        # Jika hasil kosong atau null, kita paksa error agar GitHub jadi MERAH
+        if [ "$RESULT" == "[]" ] || [ "$RESULT" == "" ] || [ "$RESULT" == "null" ]; then
+          echo "Koneksi berhasil, tapi tidak ada API yang terdaftar/terkirim ke IBM!"
+          exit 1
+        fi
