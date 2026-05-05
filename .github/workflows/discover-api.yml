@@ -2,7 +2,7 @@ name: Sync Discovered API with APIConnect
 on: [pull_request, workflow_dispatch, push]
 
 env:
-  API_HOST: apps.itz-xfosrw.infra01-lb.syd05.techzone.ibm.com
+  API_HOST: itz-xfosrw.infra01-lb.syd05.techzone.ibm.com
   PLATFORM_API_PREFIX: platform-api
   PROVIDER_ORG: cp4i-demo-org
   API_FILES: openapi2.yaml
